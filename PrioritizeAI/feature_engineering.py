@@ -1,38 +1,73 @@
-import pandas as pd
+import os
+import pickle
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy.sparse import hstack, csr_matrix
 
-def create_features(complaints, kpi_data):
-    """
-    Combine sentiment scores with KPI data and add NLP features.
-    """
-    if 'area_id' not in complaints.columns or 'area_id' not in kpi_data.columns:
-        raise KeyError("Missing 'area_id' column in one of the datasets")
+VECTORIZER_PATH = "models/tfidf_vectorizer.pkl"
 
-    merged_data = pd.merge(complaints, kpi_data, on='area_id', how='inner')
 
-    # TF-IDF Feature Extraction
-    vectorizer = TfidfVectorizer(max_features=100)
-    tfidf_matrix = vectorizer.fit_transform(merged_data['complaint_text']).toarray()
+def create_features(complaints, kpi_data, fit=True):
+    complaints = complaints.copy()
 
-    # New Features
-    merged_data['complaint_length'] = merged_data['complaint_text'].apply(lambda x: len(str(x)))
-    
-    # Required Features
-    kpi_features = ['access_issue', 'drop_call_rate', 'voice_quality_score', 'data_throughput']
-    all_features = ['sentiment_numeric', 'complaint_length'] + kpi_features
+    text = complaints["complaint_text"].fillna("").astype(str)
 
-    # Combine TF-IDF with structured data
-    X_structured = merged_data[all_features].values
-    X = np.hstack((X_structured, tfidf_matrix))
+    if fit:
+        vectorizer = TfidfVectorizer(max_features=100, stop_words="english")
+        text_features = vectorizer.fit_transform(text)
 
-    y = merged_data['severity'] if 'severity' in merged_data.columns else None
+        os.makedirs("models", exist_ok=True)
+        with open(VECTORIZER_PATH, "wb") as f:
+            pickle.dump(vectorizer, f)
+    else:
+        with open(VECTORIZER_PATH, "rb") as f:
+            vectorizer = pickle.load(f)
+        text_features = vectorizer.transform(text)
 
-    # Standardize numerical features
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    length = text.str.len().to_numpy().reshape(-1, 1)
 
-    return X_scaled, y
-#
-#
+    sentiment_map = {"negative": -1, "neutral": 0, "positive": 1}
+    sentiment = (
+        complaints["sentiment"]
+        .astype(str)
+        .str.lower()
+        .map(sentiment_map)
+        .fillna(0)
+        .to_numpy()
+        .reshape(-1, 1)
+    )
+
+    data = complaints.merge(kpi_data, on="area_id", how="left")
+
+    kpi_cols = [
+        "access_issue",
+        "drop_call_rate",
+        "voice_quality_score",
+        "data_throughput"
+    ]
+
+    kpis = data[kpi_cols].apply(
+        pd.to_numeric, errors="coerce"
+    ).fillna(0).to_numpy()
+
+    numerical = csr_matrix(
+        np.hstack([length, sentiment, kpis])
+    )
+
+    X = hstack([text_features, numerical]).tocsr()
+
+    if "severity" in complaints:
+        severity = complaints["severity"]
+
+        if severity.dtype == "object":
+            mapping = {"low": 0, "medium": 1, "high": 2}
+            y = severity.astype(str).str.lower().map(mapping)
+        else:
+            y = severity
+
+        y = y.fillna(0).astype(int).to_numpy()
+    else:
+        y = None
+
+    return X, y

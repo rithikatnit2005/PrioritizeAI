@@ -1,0 +1,4 @@
+complaint_id,area_id,complaint_text,sentiment,sentiment_score,sentiment_numeric,predicted_severity,priority_score
+104,A1,My internet is not working and the service is terrible,NEGATIVE,0.9997226595878601,-1,High,3
+105,A2,The network speed is slow today,NEGATIVE,0.9997335076332092,-1,High,3
+106,A3,My calls keep dropping and I am considering switching providers,NEGATIVE,0.9964035749435425,-1,High,3
