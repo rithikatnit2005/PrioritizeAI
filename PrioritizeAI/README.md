@@ -2,105 +2,86 @@
 
 ### AI-Powered Customer Complaint Prioritization
 
-PrioritizeAI is an AI-driven system that analyzes customer complaints and prioritizes them based on **sentiment, complaint features, and network KPI data**.
-
-The project combines **Natural Language Processing (NLP)** and **Machine Learning** to classify complaint severity and help identify issues that require immediate attention.
-
-## How It Works
-
-```text
-Customer Complaints + Network KPI Data
-                │
-                ▼
-        Sentiment Analysis
-                │
-                ▼
-        Feature Engineering
-                │
-                ▼
-         XGBoost Classifier
-                │
-                ▼
-      Severity Prediction
-                │
-                ▼
-      Complaint Prioritization
-```
+PrioritizeAI is a machine learning system that analyzes telecom customer complaints and prioritizes them based on customer sentiment, complaint characteristics, and network performance KPIs.
 
 ## Features
 
-* Sentiment analysis using a Transformer-based NLP model
-* TF-IDF feature extraction from complaint text
-* Integration of network KPI data
-* Complaint severity prediction using XGBoost
-* Automated complaint prioritization
-* FastAPI support for real-time predictions
+- Sentiment analysis using a transformer-based NLP model
+- TF-IDF based text feature extraction
+- Integration of network KPI data
+- XGBoost-based complaint severity classification
+- Automated complaint priority scoring
+- FastAPI endpoint for real-time predictions
+
+## Workflow
+
+Customer Complaints + Network KPIs  
+↓  
+Sentiment Analysis  
+↓  
+TF-IDF & Feature Engineering  
+↓  
+XGBoost Severity Prediction  
+↓  
+Priority Scoring  
+↓  
+Prioritized Complaints
 
 ## Tech Stack
 
-* **Python**
-* **Pandas & NumPy**
-* **Hugging Face Transformers**
-* **Scikit-learn**
-* **XGBoost**
-* **FastAPI & Uvicorn**
+- Python
+- Pandas & NumPy
+- Scikit-learn
+- TF-IDF
+- Transformers
+- XGBoost
+- FastAPI
+- Uvicorn
 
 ## Project Structure
 
 ```text
 PrioritizeAI/
-│
 ├── data/
 │   ├── customer_complaints.csv
-│   └── kpi_data.csv
-│
-├── data_loader.py
-├── sentiment_analysis.py
-├── feature_engineering.py
-├── classifier.py
-├── prioritization.py
+│   ├── kpi_data.csv
+│   ├── new_complaints.csv
+│   └── prioritized_complaints.csv
+├── models/
+│   ├── classifier.pkl
+│   └── tfidf_vectorizer.pkl
 ├── api.py
+├── classifier.py
+├── data_loader.py
+├── feature_engineering.py
 ├── main.py
+├── prioritization.py
+├── sentiment_analysis.py
+├── requirements.txt
 └── README.md
-```
 
-## Installation
-
-```bash
 git clone https://github.com/rithikatnit2005/PrioritizeAI.git
 cd PrioritizeAI
-```
+pip install -r requirements.txt
 
-Install dependencies:
-
-```bash
-pip install pandas numpy scikit-learn xgboost transformers torch fastapi uvicorn
-```
-
-Run the project:
-
-```bash
 python main.py
-```
 
-## API
+data/prioritized_complaints.csv
 
-Start the API using:
-
-```bash
 uvicorn api:app --reload
-```
 
-## Future Improvements
+http://127.0.0.1:8000/docs
 
-* Train on larger real-world complaint datasets
-* Add an interactive dashboard
-* Implement a database for complaint storage
-* Deploy the API to the cloud
-
----
-
-**PrioritizeAI** demonstrates how NLP and Machine Learning can be used to make customer complaint management more intelligent and data-driven.
+{
+  "complaint_id": 107,
+  "area_id": "A1",
+  "complaint_text": "My internet connection keeps failing and the service is terrible"
+}
 
 
-#
+### Step 2 — Save
+
+Press:
+
+```text
+Ctrl + S
