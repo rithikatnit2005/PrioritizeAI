@@ -1,33 +1,27 @@
-# PrioritizeAI – Customer Complaint Prioritization
+# PrioritizeAI
 
-PrioritizeAI is a simple AI-powered customer complaint prioritization system.
+AI-powered customer complaint prioritization system that predicts **Low, Medium, and High severity** using complaint text, sentiment, and network KPI data.
 
-It uses complaint text, sentiment analysis, TF-IDF features, and network KPI data to classify complaints into Low, Medium, and High severity levels.
+### Key Features
+- **TF-IDF + Transformer Sentiment Analysis** for complaint text
+- **XGBoost** for multiclass severity classification
+- **Network KPI integration** for better prioritization
+- **FastAPI** endpoint for real-time predictions
 
-## Features
+### Tech Stack
+**Python | Pandas | Scikit-learn | XGBoost | Transformers | FastAPI**
 
-- Customer complaint classification using XGBoost
-- Transformer-based sentiment analysis
-- TF-IDF text feature extraction
-- Network KPI integration
-- Priority score generation
-- FastAPI endpoint for real-time predictions
-
-## Project Workflow
-
+### Workflow
 ```text
-Customer Complaint
-        ↓
-Sentiment Analysis
-        ↓
-TF-IDF Feature Extraction
-        ↓
-Network KPI Data
-        ↓
-Feature Combination
-        ↓
-XGBoost Classifier
-        ↓
-Severity Prediction
-        ↓
-Priority Score
+Complaint → Sentiment + TF-IDF + KPI → XGBoost → Severity → Priority Score
+```
+
+### API
+Run:
+```bash
+python -m uvicorn api:app --reload
+```
+
+Open `http://127.0.0.1:8000/docs` to test predictions.
+
+> Built as a learning/demo project using a small sample dataset.
