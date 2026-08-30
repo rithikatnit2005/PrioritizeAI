@@ -1,100 +1,39 @@
 import pandas as pd
 
 from data_loader import load_data
-from sentiment_analysis import analyze_sentiment
 from feature_engineering import create_features
-from classifier import classify_complaints
-from prioritization import prioritize_issues
+from classifier import train_model
+from prioritization import prioritize_complaint
 
 
-if __name__ == "__main__":
+# 1. Load training data
+complaints, kpi_data = load_data()
 
-    # -------------------------------------------------
-    # Load training data
-    # -------------------------------------------------
+# 2. Create training features
+X, y = create_features(complaints, kpi_data)
 
-    complaints, kpi_data = load_data(
-        "data/customer_complaints.csv",
-        "data/kpi_data.csv"
-    )
+# 3. Train the model
+model = train_model(X, y)
 
-    # -------------------------------------------------
-    # Analyze sentiment
-    # -------------------------------------------------
+# 4. Create a new complaint
+new_complaint = pd.DataFrame([{
+    "complaint_id": 116,
+    "area_id": "A1",
+    "complaint_text": "My internet connection keeps failing"
+}])
 
-    complaints = analyze_sentiment(
-        complaints
-    )
+# 5. Create features for the new complaint
+X_new, _ = create_features(
+    new_complaint,
+    kpi_data,
+    fit=False
+)
 
-    # -------------------------------------------------
-    # Create training features
-    # -------------------------------------------------
+# 6. Predict severity and priority
+result = prioritize_complaint(X_new)
 
-    X, y = create_features(
-        complaints,
-        kpi_data,
-        fit=True
-    )
-
-    # -------------------------------------------------
-    # Train and save classifier
-    # -------------------------------------------------
-
-    clf = classify_complaints(
-        X,
-        y,
-        model_path="models/classifier.pkl"
-    )
-
-    # -------------------------------------------------
-    # Load new complaints
-    # -------------------------------------------------
-
-    new_complaints = pd.read_csv(
-        "data/new_complaints.csv"
-    )
-
-    # -------------------------------------------------
-    # Predict and prioritize
-    # -------------------------------------------------
-
-    prioritized_complaints = prioritize_issues(
-        "models/classifier.pkl",
-        new_complaints,
-        kpi_data
-    )
-
-    # -------------------------------------------------
-    # Save results
-    # -------------------------------------------------
-
-    prioritized_complaints.to_csv(
-        "data/prioritized_complaints.csv",
-        index=False
-    )
-
-    # -------------------------------------------------
-    # Display results
-    # -------------------------------------------------
-
-    print("\n========================================")
-    print("      PRIORITIZED COMPLAINTS")
-    print("========================================\n")
-
-    print(
-        prioritized_complaints[
-            [
-                "complaint_id",
-                "area_id",
-                "complaint_text",
-                "sentiment",
-                "predicted_severity",
-                "priority_score"
-            ]
-        ].to_string(index=False)
-    )
-
-    print(
-        "\nOutput saved to:"
-        "\ndata/prioritized_complaints.csv"
-    )
+print("\nNEW COMPLAINT")
+print("----------------")
+print("Complaint:", new_complaint["complaint_text"].iloc[0])
+print("Severity:", result["severity"])
+print("Priority Score:", result["priority_score"])

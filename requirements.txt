@@ -1,9 +1,0 @@
-pandas
-numpy
-scikit-learn
-scipy
-xgboost
-transformers
-torch
-fastapi
-uvicorn

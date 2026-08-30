@@ -1,4 +1,4 @@
-area_id,access_issue,drop_call_rate,voice_quality_score,data_throughput
-A1,1,5.2,2.1,1.5
-A2,0,1.1,4.5,15.0
-A3,1,6.7,1.8,0.8
+area_id,drop_call_rate,data_throughput
+A1,6.5,2.0
+A2,2.0,10.0
+A3,5.5,3.0

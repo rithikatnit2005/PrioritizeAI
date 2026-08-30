@@ -1,16 +1,16 @@
 complaint_id,area_id,complaint_text,severity
-101,A1,"The network keeps dropping and it is very frustrating",2
-102,A2,"The internet speed is slightly slow but manageable",0
-103,A3,"My calls keep dropping and I might switch providers",2
-104,A1,"My internet is not working at all, terrible service",2
-105,A2,"Billing issue, I was charged twice this month",1
-106,A3,"The network is slow during the evening",1
-107,A1,"Excellent service and good network coverage",0
-108,A2,"I cannot make calls properly",2
-109,A3,"Internet speed could be better",1
-110,A1,"Everything is working perfectly",0
-111,A2,"Frequent call drops are affecting my work",2
-112,A3,"The data connection is unstable",1
-113,A1,"Customer support resolved my issue quickly",0
-114,A2,"No network coverage in my area since morning",2
-115,A3,"The service is okay but sometimes slow",1
+101,A1,My internet keeps failing,High
+102,A2,Internet speed is slightly slow,Low
+103,A3,My calls keep dropping,High
+104,A1,Internet is not working at all,High
+105,A2,I was charged twice this month,Medium
+106,A3,The network is slow during the evening,Low
+107,A1,Excellent service and good network coverage,Low
+108,A2,I cannot make calls properly,High
+109,A3,Internet speed could be better,Low
+110,A1,Everything is working perfectly,Low
+111,A2,Frequent call drops are affecting my work,High
+112,A3,The data connection is unstable,Medium
+113,A1,The network connection is terrible,High
+114,A2,Billing issue needs attention,Medium
+115,A3,My internet works fine most of the time,Low
